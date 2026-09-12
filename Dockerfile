@@ -9,7 +9,9 @@ USER root
 RUN chown hermes:hermes /opt/data/config.yaml && chmod 600 /opt/data/config.yaml
 USER hermes
 
-# Override the default serve command with dashboard
+# Set environment to force dashboard mode
 ENV HERMES_DASHBOARD=1
-ENTRYPOINT ["/init"]
-CMD ["dashboard", "--host", "0.0.0.0", "--port", "10000"]
+ENV PORT=10000
+
+# Use shell form to let s6-overlay handle the command properly
+CMD hermes dashboard --host 0.0.0.0 --port 10000
