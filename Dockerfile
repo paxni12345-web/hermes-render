@@ -13,5 +13,5 @@ USER hermes
 ENV HERMES_DASHBOARD=1
 ENV PORT=10000
 
-# Use shell form to let s6-overlay handle the command properly
-CMD hermes dashboard --host 0.0.0.0 --port 10000
+# Override s6-overlay default with explicit path to hermes binary
+CMD ["/usr/local/bin/hermes", "dashboard", "--host", "0.0.0.0", "--port", "10000"]
