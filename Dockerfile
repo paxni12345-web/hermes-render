@@ -20,7 +20,9 @@ ENV HERMES_DASHBOARD_PORT=10000
 ENV HERMES_DASHBOARD_TUI=1
 ENV PORT=10000
 
-USER hermes
+USER root
 
-# Use gateway run (not dashboard run) — entrypoint will background dashboard when HERMES_DASHBOARD=1
-CMD ["gateway", "run"]
+# Override entrypoint — s6-overlay fails with permission issues on Render (uid 10000 can't write /run)
+# Start dashboard in background, then exec gateway as hermes user
+ENTRYPOINT []
+CMD ["/bin/bash", "-c", "su -s /bin/bash hermes -c 'dashboard run' & exec su -s /bin/bash hermes -c 'gateway run'"]
