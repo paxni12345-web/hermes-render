@@ -23,6 +23,6 @@ ENV PORT=10000
 USER root
 
 # Override entrypoint — s6-overlay fails with permission issues on Render (uid 10000 can't write /run)
-# Start dashboard in background, then exec gateway as hermes user
+# Use login shell to properly load hermes-agent environment
 ENTRYPOINT []
-CMD ["/bin/bash", "-c", "su -s /bin/bash hermes -c 'dashboard run' & exec su -s /bin/bash hermes -c 'gateway run'"]
+CMD ["/bin/bash", "-c", "su - hermes -c 'dashboard run' & exec su - hermes -c 'gateway run'"]
